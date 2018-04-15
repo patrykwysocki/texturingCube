@@ -100,6 +100,22 @@ typedef struct
 Vertex vertex[8];
 GLubyte triangles[36];
 
+std::string Game::loadShaderFromFile(const std::string & textFile)
+{
+	ifstream file;
+	file.open(((textFile).c_str()));
+	string output;
+	string line;
+	if (file.is_open())
+	{
+		while (!file.eof())
+		{
+			getline(file, line);
+			output.append(line + "\n");
+		}
+	}
+	return output;
+}
 /* Variable to hold the VBO identifier and shader data */
 GLuint	index,		//Index to draw
 		vsid,		//Vertex Shader ID
@@ -112,7 +128,6 @@ GLuint	index,		//Index to draw
 		to,			// Texture ID 1 to 32
 		textureID,	//Texture ID
 		texelID;	// Texel ID
-
 const string filename = "minecraft.tga";
 //const string filename = "cube.tga";
 
@@ -279,7 +294,9 @@ void Game::initialize()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	/* Vertex Shader which would normally be loaded from an external file */
-	const char* vs_src = "#version 400\n\r"
+	std::string vertexShader = loadShaderFromFile("VertexShader.txt");
+	const char* vs_src = vertexShader.c_str();  //"#version 400\n\r"
+	//const char* vs_src = "#version 400\n\r"
 		"in vec4 sv_position;"
 		"in vec4 sv_color;"
 		"in vec2 sv_texel;"
@@ -310,15 +327,17 @@ void Game::initialize()
 	}
 
 	/* Fragment Shader which would normally be loaded from an external file */
-	const char* fs_src = "#version 400\n\r"
-		"uniform sampler2D f_texture;"
-		"in vec4 color;"
-		"in vec2 texel;"
-		"out vec4 fColor;"
-		"void main() {"
-		//"	fColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);"
-		"	fColor = texture(f_texture, texel.st);"
-		"}"; //Fragment Shader Src
+	std::string fragmentShader = loadShaderFromFile("FragmentShader.txt");
+	/* Fragment Shader which would normally be loaded from an external file */
+	const char* fs_src = fragmentShader.c_str();/*"#version 400\n\r"*/
+		//"uniform sampler2D f_texture;"
+		//"in vec4 color;"
+		//"in vec2 texel;"
+		//"out vec4 fColor;"
+		//"void main() {"
+		////"	fColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);"
+		//"	fColor = texture(f_texture, texel.st);"
+		//"}"; //Fragment Shader Src
 
 	DEBUG_MSG("Setting Up Fragment Shader");
 

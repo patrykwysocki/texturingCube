@@ -14,7 +14,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
-
+#include <fstream>
 using namespace std;
 using namespace sf;
 
@@ -43,7 +43,7 @@ private:
 	MyVector3D m_cubePoints[8];
 	MyVector3D m_cubeCenterPoint = { 0,0,0 };
 	MyMatrix3 m_matrix;
-	float inverse(float inverseNum);
+	std::string loadShaderFromFile(const std::string & textFile);
 };
 
 #endif
